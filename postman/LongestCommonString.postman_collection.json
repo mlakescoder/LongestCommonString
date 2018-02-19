@@ -1,0 +1,474 @@
+{
+	"info": {
+		"name": "LongestCommonString",
+		"_postman_id": "a50f79f5-df35-bbd5-2ea8-916883d4a814",
+		"description": "Pete Toich",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Sample Input",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"larry\" },\n               { \"value\" : \"moe\" }, \n               { \"value\" : \"curly\" } ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs/sampleInput",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs",
+						"sampleInput"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get Sample Output",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"larry\" },\n               { \"value\" : \"moe\" }, \n               { \"value\" : \"curly\" } ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs/sampleOutput",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs",
+						"sampleOutput"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check no solution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "22d5ef4c-01e5-4680-a330-e323db5a7175",
+						"type": "text/javascript",
+						"exec": [
+							"tests['Status Code is 200'] = responseCode.code === 200;",
+							"if ( responseCode.code !== 200 ) {",
+							"    postman.setNextRequest(\"Test Exit\");",
+							"} else {",
+							"    var response = JSON.parse(responseBody);",
+							"    ",
+							"    tests[\"Got a response\"] = response !== null && response !== undefined;",
+							"    ",
+							"    tests[\"No solution given\"] = response.lcs.length === 0;",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"larry\" },\n               { \"value\" : \"moe\" }, \n               { \"value\" : \"curly\" } ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check Single Solution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9f6cb39f-06b8-461c-b0e0-3a41c2a7fec3",
+						"type": "text/javascript",
+						"exec": [
+							"var expectedResults = [\"com\"];",
+							"tests['Status Code is 200'] = responseCode.code === 200;",
+							"",
+							"if ( responseCode.code !== 200 ) {",
+							"    postman.setNextRequest(\"Test Exit\");",
+							"} else {",
+							"    var response = JSON.parse(responseBody);",
+							"    ",
+							"    tests[\"Got a response\"] = response !== null && response !== undefined;",
+							"    ",
+							"    var results = response.lcs;",
+							"    for (var i = 0; i < expectedResults.length; i++ ) {",
+							"        var actualResult = _.find(results, {\"value\":expectedResults[i]});",
+							"        ",
+							"        tests[\"Found result: \" + expectedResults[i]] = actualResult !== null && actualResult !== undefined;",
+							"    }",
+							"}"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"comcast\" },\n               { \"value\" : \"communicate\" }, \n               { \"value\" : \"commutation\" } ]\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check Single Solution w/ lesser solutions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bec15446-656d-4130-a955-4d861f33ed59",
+						"type": "text/javascript",
+						"exec": [
+							"var expectedResults = [\"mouse\"];",
+							"tests['Status Code is 200'] = responseCode.code === 200;",
+							"",
+							"if ( responseCode.code !== 200 ) {",
+							"    postman.setNextRequest(\"Test Exit\");",
+							"} else {",
+							"    var response = JSON.parse(responseBody);",
+							"    ",
+							"    tests[\"Got a response\"] = response !== null && response !== undefined;",
+							"    ",
+							"    var results = response.lcs;",
+							"    for (var i = 0; i < expectedResults.length; i++ ) {",
+							"        var actualResult = _.find(results, {\"value\":expectedResults[i]});",
+							"        ",
+							"        tests[\"Found result: \" + expectedResults[i]] = actualResult !== null && actualResult !== undefined;",
+							"    }",
+							"}",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"dogcatmouse\" },\n               { \"value\" : \"catamouse\" }, \n               { \"value\" : \"mousecatdogmoose\" } ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check Double Solution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0c5bb3df-265c-4951-8284-c5264ae3b3e7",
+						"type": "text/javascript",
+						"exec": [
+							"var expectedResults = [\"cat\", \"dog\"];",
+							"tests['Status Code is 200'] = responseCode.code === 200;",
+							"",
+							"if ( responseCode.code !== 200 ) {",
+							"    postman.setNextRequest(\"Test Exit\");",
+							"} else {",
+							"    var response = JSON.parse(responseBody);",
+							"    ",
+							"    tests[\"Got a response\"] = response !== null && response !== undefined;",
+							"    ",
+							"    var results = response.lcs;",
+							"    for (var i = 0; i < expectedResults.length; i++ ) {",
+							"        // Results must be in order so check them that way",
+							"        tests[\"Found result: \" + expectedResults[i]] = results[i].value === expectedResults[i];",
+							"    }",
+							"    ",
+							"}",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"dogmousecat\" },\n               { \"value\" : \"dogacat\" }, \n               { \"value\" : \"moosedogcat\" },\n               { \"value\" : \"catdograccoon\"}]\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check no POST body",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0f6db409-77c0-46e0-908f-b76ba8ba0ea8",
+						"type": "text/javascript",
+						"exec": [
+							"tests['Status Code is 200'] = responseCode.code === 400;",
+							"tests['Proper error message received'] = responseBody === \"POST data was a bad format. Get sample at ap1/v1/sampleInput\";",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check no values",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9198bee8-78e3-48f1-b0b8-ff9114d14d63",
+						"type": "text/javascript",
+						"exec": [
+							"tests['Status Code is 400'] = responseCode.code === 400;",
+							"tests['Proper error message received'] = responseBody === \"No data was give. Get sample at ap1/v1/sampleInput\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ ]\n}\n"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check empty strings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "00aa073a-532b-4268-8941-e812a9ae9797",
+						"type": "text/javascript",
+						"exec": [
+							"tests['Status Code is 400'] = responseCode.code === 400;",
+							"tests['Proper error message received'] = responseBody === \"String input values cannot be empty or blank\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"dogmousecat\" },\n               { \"value\" : \"dogacat\" }, \n               { \"value\" : \"       \" },\n               { \"value\" : \"catdograccoon\"}]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Check not unique strings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7a9132fa-2e7b-4e18-bdfd-c73e0e31da57",
+						"type": "text/javascript",
+						"exec": [
+							"tests['Status Code is 400'] = responseCode.code === 400;",
+							"tests['Proper error message received'] = responseBody === \"Input values must be unique!\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"values\" : [ { \"value\" : \"dogmousecat\" },\n               { \"value\" : \"dogacat\" }, \n               { \"value\" : \"dogacat\" },\n               { \"value\" : \"catdograccoon\"}]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/lcs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"lcs"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
